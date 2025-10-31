@@ -1,0 +1,14 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# SQLite database
+app.db
+
+# VS Code / Rider
+.vscode/
+.idea/
