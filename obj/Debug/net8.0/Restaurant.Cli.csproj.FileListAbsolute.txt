@@ -147,3 +147,4 @@ C:\Projects\restaurant_manager\Restaurant.Cli\obj\Debug\net8.0\refint\Restaurant
 C:\Projects\restaurant_manager\Restaurant.Cli\obj\Debug\net8.0\Restaurant.Cli.pdb
 C:\Projects\restaurant_manager\Restaurant.Cli\obj\Debug\net8.0\Restaurant.Cli.genruntimeconfig.cache
 C:\Projects\restaurant_manager\Restaurant.Cli\obj\Debug\net8.0\ref\Restaurant.Cli.dll
+C:\Projects\restaurant_manager\Restaurant.Cli\obj\Debug\net8.0\Restaurant.Cli.sourcelink.json

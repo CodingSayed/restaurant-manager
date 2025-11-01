@@ -1,37 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Cli.Data;
 using Restaurant.Cli.Models;
+using Restaurant.Cli.Services;
+using Restaurant.Cli.Menus;
 
 using var db = new AppDbContext();
-await db.Database.MigrateAsync();
+db.Database.Migrate();
+SeedData(db);
 
-await SeedDataAsync(db);
+var tableService = new TableService(db);
+var tablesMenu = new TablesMenu(tableService);
 
-Console.WriteLine("=== Restaurant ===");
-Console.WriteLine("[1] List Tables");
-Console.WriteLine("[2] List Menu Item");
-Console.WriteLine("[0] Exit");
-Console.WriteLine("Choose: ");
-var choice = Console.ReadLine();
-
-switch (choice)
+while (true)
 {
-    case "1":
-        ListTables(db);
-        break;
-    case "2":
-        ListMenuItems(db);
-        break;
-    default:
-        Console.WriteLine("Default Statement");
-        break;
+    ConsoleHelpers.PrintHeader("Restaurant Manager");
+    Console.WriteLine("1) Manage Tables");
+    Console.WriteLine("0) Exit");
+    Console.Write("\nSelect a number: ");
+    var choice = (Console.ReadLine() ?? "").Trim();
+
+    if (choice == "0") break;
+    if (choice == "1") tablesMenu.ShowMenu();
+    else Console.WriteLine("Invalid option");
 }
 
+Console.WriteLine("Au revoir!");
 
-static async Task SeedDataAsync(AppDbContext db)
+static void SeedData(AppDbContext db)
 {
     var changed = false;
-    if (!await db.Tables.AnyAsync())
+
+    if (!db.Tables.Any())
     {
         db.Tables.AddRange(
             new Table { Number = 1, Seats = 2, Status = "Available" },
@@ -40,36 +39,14 @@ static async Task SeedDataAsync(AppDbContext db)
         changed = true;
     }
 
-    if (!await db.MenuItems.AnyAsync())
+    if (!db.MenuItems.Any())
     {
         db.MenuItems.AddRange(
-            new MenuItem { Name = "Coca Cola", Category = "Drinks", Price = 1.49m, IsAvailable = true },
-            new MenuItem { Name = "Chocolate Cake", Category = "Dessert", Price = 7.99m, IsAvailable = true }
+            new MenuItem { Name = "Margherita Pizza", Category = "Pizza",  Price = 8.50m, IsAvailable = true },
+            new MenuItem { Name = "Espresso",         Category = "Drinks", Price = 2.20m, IsAvailable = true }
         );
         changed = true;
     }
 
-    if (changed)
-    {
-        await db.SaveChangesAsync();
-    }
-}
-
-static void ListTables(AppDbContext db)
-{
-    Console.WriteLine("\n-- Tables --");
-    foreach (var x in db.Tables.AsNoTracking().OrderBy(x => x.Number))
-    {
-        Console.WriteLine($"Table #{x.Number} | Seats: {x.Seats} | Status: {x.Status}");
-    }
-}
-
-static void ListMenuItems(AppDbContext db)
-{
-    Console.WriteLine("\n-- Menu Items --");
-    foreach (var x in db.MenuItems.AsNoTracking().OrderBy(x => x.Category).ThenBy(x => x.Name))
-    {
-        var availability = x.IsAvailable ? "" : "[UNAVAILABLE]";
-        Console.WriteLine($"{x.Category} | {x.Name} | ${x.Price} {availability}");
-    }
+    if (changed) db.SaveChanges();
 }
