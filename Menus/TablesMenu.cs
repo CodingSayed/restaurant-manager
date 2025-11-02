@@ -15,6 +15,7 @@ public class TablesMenu
     {
         while (true)
         {
+            Console.Clear();
             ConsoleHelpers.PrintHeader("Tables");
             Console.WriteLine("1) List");
             Console.WriteLine("2) Create");
