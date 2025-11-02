@@ -10,8 +10,10 @@ SeedData(db);
 
 var tableService = new TableService(db);
 var tablesMenu = new TablesMenu(tableService);
-var menuItemsService = new MenuItemService(db);
-var menuItemsMenu = new MenuItemsMenu(menuItemsService);
+var menuItemService = new MenuItemService(db);
+var menuItemMenu = new MenuItemsMenu(menuItemService);
+var orderService = new OrderService(db);
+var ordersMenu = new OrdersMenu(orderService, menuItemService);
 
 while (true)
 {
@@ -19,13 +21,15 @@ while (true)
     ConsoleHelpers.PrintHeader("Restaurant Manager");
     Console.WriteLine("1) Manage Tables");
     Console.WriteLine("2) Manage Menu Items");
+    Console.WriteLine("3) Manage Orders");
     Console.WriteLine("0) Exit");
     Console.Write("\nSelect a number: ");
     var choice = (Console.ReadLine() ?? "").Trim();
 
     if (choice == "0") break;
     if (choice == "1") tablesMenu.ShowMenu();
-    if (choice == "2") menuItemsMenu.ShowMenu();
+    if (choice == "2") menuItemMenu.ShowMenu();
+    if (choice == "3") ordersMenu.ShowMenu();
     else Console.WriteLine("Invalid option");
 }
 
